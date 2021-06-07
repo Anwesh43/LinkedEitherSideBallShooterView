@@ -122,4 +122,43 @@ class EitherSideBallShooterView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class ESBSNode(var i : Int, val state : State = State()) {
+
+        private var next : ESBSNode? = null
+        private var prev : ESBSNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            next = ESBSNode(i + 1)
+            next?.prev = this
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawESBSNode(i, state.scale, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : ESBSNode {
+            var curr : ESBSNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }

@@ -209,4 +209,13 @@ class EitherSideBallShooterView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : EitherSideBallShooterView {
+            val view : EitherSideBallShooterView = EitherSideBallShooterView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }

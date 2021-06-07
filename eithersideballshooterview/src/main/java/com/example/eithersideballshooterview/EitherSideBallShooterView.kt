@@ -18,7 +18,7 @@ val colors : Array<Int> = arrayOf(
     Color.parseColor(it)
 }.toTypedArray()
 val parts : Int = 5
-val scGap : Float = 0.02f / parts
+val scGap : Float = 0.05f / parts
 val strokeFactor : Float = 90f
 val sizeFactor : Float = 4.9f
 val rFactor : Float = 11.2f
@@ -38,6 +38,9 @@ fun Canvas.drawEitherSideBallShooter(scale : Float, w : Float, h : Float, paint 
     val sc5 : Float = scale.divideScale(4, parts)
     val size : Float = Math.min(w, h) / sizeFactor
     val r : Float = Math.min(w, h) / rFactor
+    if (sc1 <= 0.1f || sc5 >= 1) {
+        return
+    }
     save()
     translate(w / 2, h / 2)
     rotate(deg * sc3)
@@ -135,8 +138,10 @@ class EitherSideBallShooterView(ctx : Context) : View(ctx) {
         }
 
         fun addNeighbor() {
-            next = ESBSNode(i + 1)
-            next?.prev = this
+            if (i < colors.size - 1) {
+                next = ESBSNode(i + 1)
+                next?.prev = this
+            }
         }
 
         fun draw(canvas : Canvas, paint : Paint) {

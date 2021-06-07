@@ -162,7 +162,7 @@ class EitherSideBallShooterView(ctx : Context) : View(ctx) {
         }
     }
 
-    data class EitehrSideBallShooter(var i : Int, val state : State = State()) {
+    data class EitherSideBallShooter(var i : Int, val state : State = State()) {
 
         private var curr : ESBSNode = ESBSNode(0)
         private var dir : Int = 1
@@ -182,6 +182,29 @@ class EitherSideBallShooterView(ctx : Context) : View(ctx) {
 
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : EitherSideBallShooterView) {
+
+        private var animator : Animator = Animator(view)
+        private var esbs : EitherSideBallShooter = EitherSideBallShooter(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            esbs.draw(canvas, paint)
+            animator.animate {
+                esbs.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            esbs.startUpdating {
+                animator.start()
+            }
         }
     }
 }
